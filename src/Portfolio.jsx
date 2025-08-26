@@ -11,12 +11,12 @@ import {
     Rocket,
     Box,
     Wrench,
-    Star,
     Moon,
     Sun,
     MapPin,
     Phone,
 } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 // ---------- Configurable Data ----------
 const PROFILE = {
@@ -158,6 +158,7 @@ const useDarkMode = () => {
 // ---------- Component ----------
 export default function Portfolio() {
     const [dark, setDark] = useDarkMode();
+    const [menuOpen, setMenuOpen] = useState(false); 
 
     const navItems = useMemo(
         () => [
@@ -176,28 +177,65 @@ export default function Portfolio() {
             {/* Navbar */}
             <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-950/60 border-b border-slate-200/60 dark:border-slate-800/60">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                    
+                    {/* Logo */}
                     <a href="#home" className="flex items-center gap-2 font-semibold">
-                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-indigo-600 text-white"><Code2 size={18} /></span>
+                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-indigo-600 text-white">
+                            <Code2 size={18} />
+                        </span>
                         <span>{PROFILE.name}</span>
                     </a>
+
+                    {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center gap-6 text-sm">
                         {navItems.map((n) => (
-                            <a key={n.href} href={n.href} className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+                            <a
+                                key={n.href}
+                                href={n.href}
+                                className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                            >
                                 {n.label}
                             </a>
                         ))}
                     </nav>
+
+                    {/* Right side */}
                     <div className="flex items-center gap-2">
                         <a
-                            href={PROFILE.resumeUrl}
+                            href="https://drive.google.com/file/d/1DpYhBdNhcgRgDSPMnNAFoVzVM5HLAWEe/view?usp=drive_link"
                             className="hidden sm:inline-flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 px-3 py-2 text-sm hover:shadow-sm transition-shadow"
                             download
                         >
                             <Download size={16} /> Resume
                         </a>
 
+                        {/* Mobile Hamburger */}
+                        <button
+                            className="md:hidden inline-flex items-center justify-center p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                            onClick={() => setMenuOpen(!menuOpen)}
+                        >
+                            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+                        </button>
                     </div>
                 </div>
+
+                {/* Mobile Nav Dropdown */}
+                {menuOpen && (
+                    <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-black dark:bg-slate-950">
+                        <nav className="flex flex-col gap-4 p-4 text-sm">
+                            {navItems.map((n) => (
+                                <a
+                                    key={n.href}
+                                    href={n.href}
+                                    className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                                    onClick={() => setMenuOpen(false)} // close menu on click
+                                >
+                                    {n.label}
+                                </a>
+                            ))}
+                        </nav>
+                    </div>
+                )}
             </header>
 
             {/* Hero */}
@@ -327,14 +365,14 @@ and build solutions that make a real impact."
                 className="py-16 md:py-24 border-t bg-black border-slate-200/60 dark:border-slate-800/60"
             >
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <h2 className="text-6xl text-center font-bold text-white">My Education</h2><br/>
+                    <h2 className="text-6xl text-center font-bold text-white">My Education</h2><br />
                     <p className="text-slate-400 text-center">
                         Education Is Not The Learning Of Facts, But The Training Of The Mind To Think.
                     </p>
 
                     <div className="mt-10 space-y-8">
                         {EDUCATION.map((edu, i) => (
-                            <EducationCard key={i} edu={edu}  />
+                            <EducationCard key={i} edu={edu} />
                         ))}
                     </div>
                 </div>
