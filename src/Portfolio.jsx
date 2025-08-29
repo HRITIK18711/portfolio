@@ -158,7 +158,7 @@ const useDarkMode = () => {
 // ---------- Component ----------
 export default function Portfolio() {
     const [dark, setDark] = useDarkMode();
-    const [menuOpen, setMenuOpen] = useState(false); 
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const navItems = useMemo(
         () => [
@@ -177,7 +177,7 @@ export default function Portfolio() {
             {/* Navbar */}
             <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-950/60 border-b border-slate-200/60 dark:border-slate-800/60">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                    
+
                     {/* Logo */}
                     <a href="#home" className="flex items-center gap-2 font-semibold">
                         <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-indigo-600 text-white">
@@ -422,10 +422,34 @@ and build solutions that make a real impact."
                     <SectionHeader title="Let’s work together" subtitle="Tell me about your project" />
                     <form
                         className="mx-auto mt-10 grid gap-4 text-left"
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            alert("Thanks! I will get back to you soon.");
-                        }}
+                        onSubmit={async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData();
+  formData.append("Name", e.target.name.value);
+  formData.append("Email", e.target.email.value);
+  formData.append("Subject", e.target.subject.value);
+  formData.append("Message", e.target.message.value);
+
+  try {
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycbw89R-56uYwWSPiOnFMER53qG8vAtDGdRECHHn9bkXvRt7msunFfwiyar6v9vo7zbnZ/exec",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const text = await res.text(); // Debugging
+    console.log("Response:", text);
+
+    alert("✅ Thanks! Your response has been recorded.");
+    e.target.reset();
+  } catch (error) {
+    console.error("Error!", error);
+    alert("❌ Something went wrong. Please try again.");
+  }
+}}
                     >
                         <div className="grid md:grid-cols-2 gap-4">
                             <Input label="Name" name="name" placeholder="Your full name" />
